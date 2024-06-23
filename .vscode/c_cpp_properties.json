@@ -4,8 +4,7 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "D:\\webot\\Webots\\include\\controller\\c\\webots\\**",
-                "D:/webot/Webots/include/controller/c"
+                "D:\\webot\\Webots\\include\\controller\\c\\**"
             ],
             "defines": [
                 "_DEBUG",

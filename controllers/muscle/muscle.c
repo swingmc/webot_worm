@@ -24,6 +24,7 @@
 #define TIME_STEP 16
 
 int main(int argc, char **argv) {
+  printf("muscle controller started\n");
   wb_robot_init();
   WbDeviceTag muscle = wb_robot_get_device("muscle");
   WbDeviceTag muscle2 = 0;
@@ -41,6 +42,7 @@ int main(int argc, char **argv) {
   wb_position_sensor_enable(ps, TIME_STEP);
 
   while (wb_robot_step(TIME_STEP) != -1) {
+    printf("muscle position: %f\n, time step: %d\n", p, TIME_STEP);
     wb_motor_set_position(muscle, p);
     if (muscle2)
       wb_motor_set_position(muscle2, 2 - p);
