@@ -38,6 +38,10 @@ int main(int argc, char **argv) {
   } else if (strcmp(wb_robot_get_name(), "hinge2") == 0) {
     muscle2 = wb_robot_get_device("muscle2");
   }
+  if (strcmp(wb_robot_get_name(), "slider2") == 0) {
+    max = 0.08;
+    step = 0.05;
+  }
   double dp = step;
   wb_position_sensor_enable(ps, TIME_STEP);
 
