@@ -1,0 +1,72 @@
+#VRML_SIM R2023a utf8
+PROTO RingMuscle [
+  field SFFloat radius 0.05  #// 环形肌肉的半径
+  field SFFloat muscleLength 0.1  #// 每个肌肉单元的长度
+  field SFFloat muscleRadius 0.005  #// 每个肌肉单元的半径
+] {
+  Group {
+    children [
+      DEF MUSCLE_UNIT_0 Robot {
+        translation 0.1 0 0.04
+        children [
+            DEF SLIDER Robot {
+                translation -0.01 -0.21 0.04
+                children [
+                  DEF JOINT Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.337255 0.337255 0.337255
+                      transparency 0.009999999776482582
+                      roughness 1
+                      metalness 0
+                    }
+                    geometry Sphere {
+                      radius 0.008
+                    }
+                  }
+                  SliderJoint {
+                    jointParameters JointParameters {
+                      axis 1 0 0
+                    }
+                    device [
+                      LinearMotor {
+                        name "muscle"
+                        controlPID 1 0.6 0
+                        minPosition -0.2
+                        maxPosition 1
+                        maxForce 0.3
+                        muscles [
+                          Muscle {
+                            volume 0.0001
+                            color [
+                              1 0 0
+                              1 1 0
+                              1 0 1
+                            ]
+                          }
+                        ]
+                      }
+                      PositionSensor {
+                      }
+                    ]
+                    endPoint Solid {
+                      translation 0.05 0 0
+                      children [
+                        USE JOINT
+                      ]
+                      boundingObject USE JOINT
+                      physics Physics {
+                        density -1
+                        mass 2
+                      }
+                    }
+                  }
+                ]
+                name "slider"
+                boundingObject USE JOINT
+                controller "muscle"
+              }
+        ]
+      }
+     }
+    ]
+  }
