@@ -384,8 +384,8 @@ DEF SLIDER2 Robot {
       geometry Sphere {
         radius 0.008
       }
-    }
-    SliderJoint {
+      children [
+        SliderJoint {
       jointParameters JointParameters {
         axis 1 0 0
       }
@@ -398,7 +398,7 @@ DEF SLIDER2 Robot {
           maxForce 0.3
           muscles [
             Muscle {
-              volume 0.0001
+              volume 0.0003
               color [
                 1 0 0
                 1 1 0
@@ -422,6 +422,14 @@ DEF SLIDER2 Robot {
         }
       }
     }
+
+    
+
+      ]
+    }
+    
+    
+    
   ]
   name "slider2"
   boundingObject USE JOINT
