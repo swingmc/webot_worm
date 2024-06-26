@@ -37,6 +37,8 @@ int main(int argc, char **argv) {
     step = 0.05;
   } else if (strcmp(wb_robot_get_name(), "hinge2") == 0) {
     muscle2 = wb_robot_get_device("muscle2");
+  } else if (strcmp(wb_robot_get_name(), "slider2") == 0) {
+    muscle2 = wb_robot_get_device("muscle2");
   }
   if (strcmp(wb_robot_get_name(), "slider2") == 0) {
     max = 0.08;

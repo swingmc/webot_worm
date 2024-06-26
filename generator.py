@@ -1,23 +1,45 @@
+import math
+
+ChildrenNode = "children"
+EmbededFlag = "is_embeded"
+
+worm_length = 8
+ring_muscle_number = 6
+
+side_length = 1
+angle_increment = math.pi / 3  # 60 degrees in radians for each step
+
+# Coordinates storage
+coordinates = []
+
+# Starting point
+coordinates.append((0.0, 0.0))
+
+# Compute the remaining points
+for i in range(1, 6):
+    angle = angle_increment * i
+    x = round(side_length * math.cos(angle), 7)
+    y = round(side_length * math.sin(angle), 7)
+    coordinates.append((x, y))
+
 # Define appearance properties
-def create_appearance(base_color, roughness=1, metalness=0, transparency=0):
+def create_appearance(base_color = "0.337255 0.337255 0.337255", roughness=1, metalness=0, transparency=0.009999999776482582):
     return {
-        "PBRAppearance": {
             "baseColor": base_color,
             "roughness": roughness,
             "metalness": metalness,
             "transparency": transparency
-        }
     }
 
 # Define shape properties
-def create_shape(geometry_type, geometry_props, appearance):
+def create_shape():
     return {
-        "Shape": {
-            "appearance": appearance,
-            "geometry": {
-                geometry_type: geometry_props
+        
+            "appearance PBRAppearance": create_appearance(),
+            "geometry Sphere": {
+                "radius":0.008
             }
-        }
+        
     }
 
 # Define physics properties
@@ -47,22 +69,22 @@ def serialize_vrml(node, indent=0):
     space = "  " * indent
 
     square_brackets_list = ["muscles", "centerOfMass", "color", "device", "children"]
+
+    ignore_list = [EmbededFlag]
     
     if isinstance(node, dict):
         # Process dictionary type nodes
         for key, value in node.items():
             if isinstance(value, dict):
-                vrml_str += f"{{{space}\n"
+                
                 if key in square_brackets_list:
                     vrml_str += f"{space}{key} [\n"
-                # If the value is a dictionary, it represents a complex node
-                #if 'type' in value:
-                #    vrml_str += f"{space}{key} {value['type']} {{\n"
-                # Recursively serialize child nodes
-                #if 'children' in value:
-                #    vrml_str += serialize_vrml(value['children'], indent + 1)
-                vrml_str += serialize_vrml(value, indent + 1)
-                vrml_str += f"{space}}}\n"
+                    vrml_str += serialize_vrml(value, indent + 2)
+                    vrml_str += f"{space}  ]\n"
+                else:
+                    vrml_str += f"{space}{key} {{\n"
+                    vrml_str += serialize_vrml(value, indent + 1)
+                    vrml_str += f"{space}}}\n"
             else:
                 # Handle simple attributes
                 vrml_str += f"{space}{key} {value}\n"
@@ -291,9 +313,11 @@ vrml_robot = {
     }
 }
 
+
+"""
 # Example usage
 appearance = create_appearance("0.8 0.8 0.8")
-shape = create_shape("Box", {"size": "0.05 0.08 0.06"}, appearance)
+shape = create_shape()
 physics = create_physics(-1, 20, ["-0.03 0 -0.015"])
 
 # Integrating into a VRML node
@@ -309,16 +333,230 @@ vrml_robot = {
         "physics": physics
     }
 }
+"""
 
 
 
 
 
+
+
+"""
+def create_joint(row, column):
+    return {f"DEF JOINT_{row}_{column} Shape": 
+            create_shape(),
+            "SliderJoint": create_slider_joint(f"JOINT_{row}_{column}", f"JOINT_{row}_{column+1}", "{row} {} 0")
+         }
+"""
+
+def create_worm_ring(translation):
+    return {
+        "DEF WORM Robot":
+        {
+        "translation": translation,
+        ChildrenNode: {
+            f"DEF JOINT_{0}_{0} Shape": create_shape(),
+            "SliderJoint": create_slider_joint(0,0),
+            },
+        "name": "\"worm\"",
+        "boundingObject": "USE JOINT_0_0",
+        "controller": "\"ring_muscle\"",
+        }
+    }
+
+
+"""
+def create_joint_string(row, column):
+    return serialize_vrml(
+        {f"DEF JOINT_{row}_{column} Shape": 
+            create_shape()
+         }
+    )
+    """
+
+def create_joint_parameters():
+    return {
+        "axis": "1 0 0",
+    }
+
+"""
+def create_endpoint(translation, rotation, children, boundingObject, physics):
+    return {
+            "translation": translation,
+            "rotation": rotation,
+            "children": children,
+            "boundingObject": boundingObject,
+            "physics": physics
+    }
+    """
+
+#link joint_row_column to joint_row_column+1
+def create_slider_joint(row, column):
+    return {
+        "jointParameters JointParameters": create_joint_parameters(),
+        "device": create_linear_muscle_device(f"muscle_{row}_{column}"),
+        "endPoint Solid": create_linked_slider_joint_endpoint(row, column+1)
+    }
+
+
+def create_linked_slider_joint_endpoint(row, column):
+    global coordinates
+    global ring_muscle_number
+    #print(coordinates)
+    x, y = coordinates[column%ring_muscle_number]
+    if column == ring_muscle_number:
+        return {
+            "translation": f"{row} {x} {y}",
+            "children": {
+                "USE": f"JOINT_{row}_{0}"
+            },
+            "boundingObject": {
+                "USE": f"JOINT_{row}_{column}"
+            },
+            "physics Physics": {   
+                "density": "1",
+                "mass": "2"
+            }
+        }
+
+    return {
+        "translation": f"{row} {x} {y}",
+        "children": {
+            f"DEF JOINT_{row}_{column} Shape": create_shape(),
+            "SliderJoint": create_slider_joint(row, column),
+            
+        },
+        "boundingObject": {
+            "USE": f"JOINT_{row}_{column}"
+        },
+        "physics Physics": {   
+            "density": "1",
+            "mass": "2"
+        }
+    }
+
+def create_linked_slider_joint_endpoint_with_children(translation, endpoint_children):
+
+    return {
+        "translation": translation,
+        "children": {
+            ""
+        },
+        "boundingObject": {
+            "USE": endpoint_children
+        },
+        "physics Physics": {   
+            "density": "1",
+            "mass": "2"
+        }
+    }
+
+
+def create_linear_muscle_device(name):
+    return {
+        "LinearMotor": create_linear_motor(name),
+        "PositionSensor": {}
+    }
+
+def create_linear_motor(name):
+    return {        
+        "controlPID": "1 0.6 0",
+        "minPosition": "0",
+        "maxPosition": "1",
+        "maxForce": "0.3",
+        "muscles": create_muscle(),
+    }
+
+def create_muscle():
+    return {
+        "Muscle": {
+            "volume": "0.0001",
+            "startOffset": "0.01 0 0",
+            "endOffset": "0 0.05 0",
+            "color": "[1 0 0 1 1 0 1 0 1]"
+        }
+    }
+
+def create_endpoint(translation, children = ""):
+    return {
+
+    }
+
+
+def calculate_hexagon_vertices(a, cx=0.5, cy=0.5):
+    
+    vertices = []
+    for i in range(6):
+        angle_rad = math.radians(60 * i)  
+        x = cx + a * math.cos(angle_rad)
+        y = cy + a * math.sin(angle_rad)
+        vertices.append((x, y))
+    return vertices
+
+
+a = 1
+vertices = calculate_hexagon_vertices(a)
+for vertex in vertices:
+    print(vertex)
+
+def construct_worm():
+    worm_length = 8
+    worm_ring_muscle_number = 6
+    worm_joints = [[0 for _ in range(worm_ring_muscle_number)] for _ in range(worm_length)]
+
+    for i in range(worm_length):
+        for j in range(worm_ring_muscle_number):
+            worm_joints[i][j] = create_joint(i,j)
+
+    robot = {
+        "DEF WORM Robot": {
+            "translation": "0 0 1",
+            "children": {
+                 worm_joints[0][0]:""
+            },
+            "name": "\"worm\"",
+            "controller": "\"muscle\""
+        }
+    }
+
+    return robot
+
+
+def construct_worm_ring():
+    worm_ring_muscle_number = 4
+
+    points = calculate_hexagon_vertices(1)
+   
+    worm_joints = [0 for _ in range(worm_ring_muscle_number)]
+    for j in range(worm_ring_muscle_number):
+        worm_joints[j] = create_joint(0,j)
+
+    robot = {
+        "DEF WORM Robot": {
+            "translation": "0 0 1",
+            "children": {
+                 worm_joints[0][0]:""
+                 
+            },
+            "name": "\"worm\"",
+            "controller": "\"muscle\""
+        }
+    }
+
+    return robot
+
+
+
+
+     
+
+
+        
 if __name__ == "__main__":
     # Call the function and print the result
     #print(vrml_robot)
-    vrml_code = serialize_vrml(vrml_robot)
+    vrml_code = serialize_vrml(create_worm_ring("1 1 0"))
+    #print(vrml_code)
     print(vrml_code)
     with open("generator.proto", "w") as file:
         file.write(vrml_code)
-

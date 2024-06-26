@@ -1,32 +1,285 @@
-{
-{  
-{    
-{      
-{        
-{          
-{            
-{              
-                baseColor 0.8 0.8 0.8
-                roughness 1
-                metalness 0
-                transparency 0
-              }
+DEF WORM Robot {
+  translation 1 1 0
+  children [
+      DEF JOINT_0_0 Shape {
+        appearance PBRAppearance {
+          baseColor 0.337255 0.337255 0.337255
+          roughness 1
+          metalness 0
+          transparency 0.009999999776482582
+        }
+        geometry Sphere {
+          radius 0.008
+        }
+      }
+      SliderJoint {
+        jointParameters JointParameters {
+          axis 1 0 0
+        }
+        device [
+            LinearMotor {
+              controlPID 1 0.6 0
+              minPosition 0
+              maxPosition 1
+              maxForce 0.3
+              muscles [
+                  Muscle {
+                    volume 0.0001
+                    startOffset 0.01 0 0
+                    endOffset 0 0.05 0
+                    color [1 0 0 1 1 0 1 0 1]
+                  }
+                ]
             }
-{            
-{              
-                size 0.05 0.08 0.06
-              }
+            PositionSensor {
             }
+          ]
+        endPoint Solid {
+          translation 0 0.5 0.8660254
+          children [
+              DEF JOINT_0_1 Shape {
+                appearance PBRAppearance {
+                  baseColor 0.337255 0.337255 0.337255
+                  roughness 1
+                  metalness 0
+                  transparency 0.009999999776482582
+                }
+                geometry Sphere {
+                  radius 0.008
+                }
+              }
+              SliderJoint {
+                jointParameters JointParameters {
+                  axis 1 0 0
+                }
+                device [
+                    LinearMotor {
+                      controlPID 1 0.6 0
+                      minPosition 0
+                      maxPosition 1
+                      maxForce 0.3
+                      muscles [
+                          Muscle {
+                            volume 0.0001
+                            startOffset 0.01 0 0
+                            endOffset 0 0.05 0
+                            color [1 0 0 1 1 0 1 0 1]
+                          }
+                        ]
+                    }
+                    PositionSensor {
+                    }
+                  ]
+                endPoint Solid {
+                  translation 0 -0.5 0.8660254
+                  children [
+                      DEF JOINT_0_2 Shape {
+                        appearance PBRAppearance {
+                          baseColor 0.337255 0.337255 0.337255
+                          roughness 1
+                          metalness 0
+                          transparency 0.009999999776482582
+                        }
+                        geometry Sphere {
+                          radius 0.008
+                        }
+                      }
+                      SliderJoint {
+                        jointParameters JointParameters {
+                          axis 1 0 0
+                        }
+                        device [
+                            LinearMotor {
+                              controlPID 1 0.6 0
+                              minPosition 0
+                              maxPosition 1
+                              maxForce 0.3
+                              muscles [
+                                  Muscle {
+                                    volume 0.0001
+                                    startOffset 0.01 0 0
+                                    endOffset 0 0.05 0
+                                    color [1 0 0 1 1 0 1 0 1]
+                                  }
+                                ]
+                            }
+                            PositionSensor {
+                            }
+                          ]
+                        endPoint Solid {
+                          translation 0 -1.0 0.0
+                          children [
+                              DEF JOINT_0_3 Shape {
+                                appearance PBRAppearance {
+                                  baseColor 0.337255 0.337255 0.337255
+                                  roughness 1
+                                  metalness 0
+                                  transparency 0.009999999776482582
+                                }
+                                geometry Sphere {
+                                  radius 0.008
+                                }
+                              }
+                              SliderJoint {
+                                jointParameters JointParameters {
+                                  axis 1 0 0
+                                }
+                                device [
+                                    LinearMotor {
+                                      controlPID 1 0.6 0
+                                      minPosition 0
+                                      maxPosition 1
+                                      maxForce 0.3
+                                      muscles [
+                                          Muscle {
+                                            volume 0.0001
+                                            startOffset 0.01 0 0
+                                            endOffset 0 0.05 0
+                                            color [1 0 0 1 1 0 1 0 1]
+                                          }
+                                        ]
+                                    }
+                                    PositionSensor {
+                                    }
+                                  ]
+                                endPoint Solid {
+                                  translation 0 -0.5 -0.8660254
+                                  children [
+                                      DEF JOINT_0_4 Shape {
+                                        appearance PBRAppearance {
+                                          baseColor 0.337255 0.337255 0.337255
+                                          roughness 1
+                                          metalness 0
+                                          transparency 0.009999999776482582
+                                        }
+                                        geometry Sphere {
+                                          radius 0.008
+                                        }
+                                      }
+                                      SliderJoint {
+                                        jointParameters JointParameters {
+                                          axis 1 0 0
+                                        }
+                                        device [
+                                            LinearMotor {
+                                              controlPID 1 0.6 0
+                                              minPosition 0
+                                              maxPosition 1
+                                              maxForce 0.3
+                                              muscles [
+                                                  Muscle {
+                                                    volume 0.0001
+                                                    startOffset 0.01 0 0
+                                                    endOffset 0 0.05 0
+                                                    color [1 0 0 1 1 0 1 0 1]
+                                                  }
+                                                ]
+                                            }
+                                            PositionSensor {
+                                            }
+                                          ]
+                                        endPoint Solid {
+                                          translation 0 0.5 -0.8660254
+                                          children [
+                                              DEF JOINT_0_5 Shape {
+                                                appearance PBRAppearance {
+                                                  baseColor 0.337255 0.337255 0.337255
+                                                  roughness 1
+                                                  metalness 0
+                                                  transparency 0.009999999776482582
+                                                }
+                                                geometry Sphere {
+                                                  radius 0.008
+                                                }
+                                              }
+                                              SliderJoint {
+                                                jointParameters JointParameters {
+                                                  axis 1 0 0
+                                                }
+                                                device [
+                                                    LinearMotor {
+                                                      controlPID 1 0.6 0
+                                                      minPosition 0
+                                                      maxPosition 1
+                                                      maxForce 0.3
+                                                      muscles [
+                                                          Muscle {
+                                                            volume 0.0001
+                                                            startOffset 0.01 0 0
+                                                            endOffset 0 0.05 0
+                                                            color [1 0 0 1 1 0 1 0 1]
+                                                          }
+                                                        ]
+                                                    }
+                                                    PositionSensor {
+                                                    }
+                                                  ]
+                                                endPoint Solid {
+                                                  translation 0 0.0 0.0
+                                                  children [
+                                                      USE JOINT_0_0
+                                                    ]
+                                                  boundingObject {
+                                                    USE JOINT_0_6
+                                                  }
+                                                  physics Physics {
+                                                    density 1
+                                                    mass 2
+                                                  }
+                                                }
+                                              }
+                                            ]
+                                          boundingObject {
+                                            USE JOINT_0_5
+                                          }
+                                          physics Physics {
+                                            density 1
+                                            mass 2
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  boundingObject {
+                                    USE JOINT_0_4
+                                  }
+                                  physics Physics {
+                                    density 1
+                                    mass 2
+                                  }
+                                }
+                              }
+                            ]
+                          boundingObject {
+                            USE JOINT_0_3
+                          }
+                          physics Physics {
+                            density 1
+                            mass 2
+                          }
+                        }
+                      }
+                    ]
+                  boundingObject {
+                    USE JOINT_0_2
+                  }
+                  physics Physics {
+                    density 1
+                    mass 2
+                  }
+                }
+              }
+            ]
+          boundingObject {
+            USE JOINT_0_1
+          }
+          physics Physics {
+            density 1
+            mass 2
           }
         }
       }
-    }
-  }
-{  
-{    
-      density -1
-      mass 20
-      centerOfMass -0.03 0 -0.015
-    }
-  }
+    ]
+  name "worm"
+  boundingObject USE JOINT_0_0
+  controller "ring_muscle"
 }

@@ -10,6 +10,7 @@ WorldInfo {
   ]
   title "Muscle"
   basicTimeStep 16
+  gravity 9.81
 }
 Viewpoint {
   orientation -0.5223578251770465 0.09301806886713386 0.8476378597847877 2.7753819314893793
@@ -371,8 +372,11 @@ DEF SLIDER Robot {
 }
 
 
+
+
+
 DEF SLIDER2 Robot {
-  translation -0.02 -0.42 0.08
+  translation 0 0.5 0
   children [
     DEF JOINT Shape {
       appearance PBRAppearance {
@@ -384,8 +388,8 @@ DEF SLIDER2 Robot {
       geometry Sphere {
         radius 0.008
       }
-      children [
-        SliderJoint {
+    }
+    SliderJoint {
       jointParameters JointParameters {
         axis 1 0 0
       }
@@ -398,7 +402,7 @@ DEF SLIDER2 Robot {
           maxForce 0.3
           muscles [
             Muscle {
-              volume 0.0003
+              volume 0.0001
               color [
                 1 0 0
                 1 1 0
@@ -413,25 +417,69 @@ DEF SLIDER2 Robot {
       endPoint Solid {
         translation 0.05 0 0
         children [
-          USE JOINT
+          DEF JOINT2 Shape {
+      appearance PBRAppearance {
+        baseColor 0.337255 0.337255 0.337255
+        transparency 0.009999999776482582
+        roughness 1
+        metalness 0
+      }
+      geometry Sphere {
+        radius 0.008
+      }
+    }
+
+    SliderJoint {
+      jointParameters JointParameters {
+        axis 1 0 0
+      }
+      device [
+        LinearMotor {
+          name "muscle2"
+          controlPID 1 0.6 0
+          minPosition -0.2
+          maxPosition 1
+          maxForce 0.3
+          muscles [
+            Muscle {
+              volume 0.0001
+              color [
+                1 0 0
+                1 1 0
+                1 0 1
+              ]
+            }
+          ]
+        }
+        PositionSensor {
+        }
+      ]
+      endPoint Solid {
+        translation 0 0.2 0.05
+        children [
+          USE JOINT2
         ]
-        boundingObject USE JOINT
+        boundingObject USE JOINT2
         physics Physics {
           density -1
           mass 2
         }
       }
     }
-
-    
-
-      ]
+        ]
+        boundingObject USE JOINT2
+        physics Physics {
+          density -1
+          mass 2
+        }
+      }
     }
-    
-    
-    
   ]
   name "slider2"
   boundingObject USE JOINT
   controller "muscle"
 }
+
+
+
+
