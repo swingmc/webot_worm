@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
+
 #include <webots/motor.h>
 #include <webots/position_sensor.h>
 #include <webots/robot.h>
 
 #include <stdio.h>
 #include <string.h>
+
 
 #define TIME_STEP 16
 
@@ -48,8 +50,8 @@ int main(int argc, char **argv) {
   wb_position_sensor_enable(ps, TIME_STEP);
 
   while (wb_robot_step(TIME_STEP) != -1) {
-    printf("muscle position: %f\n, time step: %d\n", p, TIME_STEP);
-    wb_motor_set_position(muscle, p);
+    if (muscle)
+      wb_motor_set_position(muscle, p);
     if (muscle2)
       wb_motor_set_position(muscle2, 2 - p);
     const double pos = wb_position_sensor_get_value(ps);

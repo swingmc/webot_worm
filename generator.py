@@ -6,11 +6,12 @@ EmbededFlag = "is_embeded"
 worm_length = 8
 ring_muscle_number = 6
 
-side_length = 1
+side_length = 0.2
 angle_increment = math.pi / 3  # 60 degrees in radians for each step
 
 # Coordinates storage
 coordinates = []
+rela_coordinates = []
 
 # Starting point
 coordinates.append((0.0, 0.0))
@@ -21,6 +22,11 @@ for i in range(1, 6):
     x = round(side_length * math.cos(angle), 7)
     y = round(side_length * math.sin(angle), 7)
     coordinates.append((x, y))
+
+for i in range(0, 6):
+    x1, y1 = coordinates[i]
+    x2, y2 = coordinates[(i + 1) % 6]
+    rela_coordinates.append((x2 - x1, y2 - y1))
 
 # Define appearance properties
 def create_appearance(base_color = "0.337255 0.337255 0.337255", roughness=1, metalness=0, transparency=0.009999999776482582):
@@ -120,199 +126,6 @@ vrml_dict = {
 
 
 
-vrml_robot = {
-    "DEF HINGE": {
-        "type": "Robot",
-        "translation": "0 0 0.04",
-        "children": {
-                "DEF BOX": {
-                    "type": "Pose",
-                    "translation": "-0.025 0 -0.01",
-                    "children": 
-                        {
-                            "Shape": {
-                                "appearance": {
-                                    "PBRAppearance": {
-                                        "baseColor": "0.8 0.8 0.8",
-                                        "roughness": 1,
-                                        "metalness": 0
-                                    }
-                                },
-                                "geometry": {
-                                    "Box": {
-                                        "size": "0.05 0.08 0.06"
-                                    }
-                                }
-                            }
-                        }
-                    
-                },
-                "DEF JOINT Shape": {
-                    "type": "Shape",
-                    "appearance": {
-                        "PBRAppearance": {
-                            "baseColor": "0.337255 0.337255 0.337255",
-                            "transparency": "0.009999999776482582",
-                            "roughness": 1,
-                            "metalness": 0
-                        }
-                    },
-                    "geometry": {
-                        "Sphere": {
-                            "radius": "0.008"
-                        }
-                    }
-                },
-                "DEF BONE1 Pose": {
-                    "type": "Pose",
-                    "translation": "0.05 0 0",
-                    "rotation": "0 1 0 -1.5707953071795862",
-                    "children": [
-                        {
-                            "Shape": {
-                                "appearance": {
-                                    "PBRAppearance": {
-                                        "baseColor": "0.8 0.8 0.8",
-                                        "roughness": 1,
-                                        "metalness": 0
-                                    }
-                                },
-                                "geometry": {
-                                    "Capsule": {
-                                        "height": "0.1",
-                                        "radius": "0.005"
-                                    }
-                                }
-                            }
-                        }
-                    ]
-                },
-                "HingeJoint": {
-                    "type": "HingeJoint",
-                    "jointParameters": {
-                        "HingeJointParameters": {
-                            "axis": "0 -1 0",
-                            "anchor": "0.1 0 0",
-                            "dampingConstant": "0.4",
-                            "suspensionAxis": "0 1 0"
-                        }
-                    },
-                    "device": [
-                        {
-                            "RotationalMotor": {
-                                "name": "muscle",
-                                "controlPID": "1 0.1 0",
-                                "minPosition": "-0.5",
-                                "maxPosition": "3",
-                                "maxTorque": "0.5",
-                                "muscles": [
-                                    {
-                                        "Muscle": {
-                                            "volume": "0.0001",
-                                            "startOffset": "0.01 0 0",
-                                            "endOffset": "0 0.05 0",
-                                            "color": ["1 0 0", "1 1 0", "1 0 1"]
-                                        }
-                                    },
-                                    {
-                                        "Muscle": {
-                                            "volume": "6e-05",
-                                            "startOffset": "0.1 0 0",
-                                            "endOffset": "0 0.05 0"
-                                        }
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "PositionSensor": {}
-                        }
-                    ],
-                    "endPoint": {
-                        "Solid": {
-                            "translation": "0.1 0 0",
-                            "rotation": "0 0 1 -1.5707996938995747",
-                            "children": [
-                                {
-                                    "USE JOINT": {},
-                                    "DEF BONE2 Pose": {
-                                        "type": "Pose",
-                                        "translation": "0 0.0225 0",
-                                        "rotation": "1 0 0 1.5707996938995747",
-                                        "children": [
-                                            {
-                                                "Shape": {
-                                                    "appearance": {
-                                                        "PBRAppearance": {
-                                                            "baseColor": "0.8 0.8 0.8",
-                                                            "roughness": 1,
-                                                            "metalness": 0
-                                                        }
-                                                    },
-                                                    "geometry": {
-                                                        "Capsule": {
-                                                            "height": "0.045",
-                                                            "radius": "0.005"
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "boundingObject": {
-                                "Group": {
-                                    "children": [
-                                        {
-                                            "USE JOINT": {}
-                                        },
-                                        {
-                                            "USE BONE2": {}
-                                        }
-                                    ]
-                                }
-                            },
-                            "physics": {
-                                "Physics": {
-                                    "density": "-1",
-                                    "mass": "0.6"
-                                }
-                            }
-                        }
-                    }
-                }
-            
-    },
-        "name": "hinge",
-        "boundingObject": {
-            "Group": {
-                "children": [
-                    {
-                        "USE BOX": {}
-                    },
-                    {
-                        "USE JOINT": {}
-                    },
-                    {
-                        "USE BONE1": {}
-                    }
-                ]
-            }
-        },
-        "physics": {
-            "Physics": {
-                "density": "-1",
-                "mass": "20",
-                "centerOfMass": [
-                    "-0.03 0 -0.015"
-                ]
-            }
-        },
-        "controller": "muscle"
-    }
-}
-
 
 """
 # Example usage
@@ -410,9 +223,7 @@ def create_linked_slider_joint_endpoint(row, column):
             "children": {
                 "USE": f"JOINT_{row}_{0}"
             },
-            "boundingObject": {
-                "USE": f"JOINT_{row}_{column}"
-            },
+            "boundingObject": f"USE JOINT_{row}_{0}",
             "physics Physics": {   
                 "density": "1",
                 "mass": "2"
@@ -426,15 +237,14 @@ def create_linked_slider_joint_endpoint(row, column):
             "SliderJoint": create_slider_joint(row, column),
             
         },
-        "boundingObject": {
-            "USE": f"JOINT_{row}_{column}"
-        },
+        "boundingObject": f"USE JOINT_{row}_{column}",
         "physics Physics": {   
             "density": "1",
             "mass": "2"
         }
     }
 
+"""
 def create_linked_slider_joint_endpoint_with_children(translation, endpoint_children):
 
     return {
@@ -450,16 +260,20 @@ def create_linked_slider_joint_endpoint_with_children(translation, endpoint_chil
             "mass": "2"
         }
     }
+"""
 
 
 def create_linear_muscle_device(name):
     return {
         "LinearMotor": create_linear_motor(name),
-        "PositionSensor": {}
+        "PositionSensor": {
+            "name": f"\"{name}_sensor\"",
+        }
     }
 
 def create_linear_motor(name):
     return {        
+        "name": f"\"{name}\"",
         "controlPID": "1 0.6 0",
         "minPosition": "0",
         "maxPosition": "1",
@@ -471,15 +285,10 @@ def create_muscle():
     return {
         "Muscle": {
             "volume": "0.0001",
-            "startOffset": "0.01 0 0",
-            "endOffset": "0 0.05 0",
+            #"startOffset": "0.01 0 0",
+            #"endOffset": "0 0.05 0",
             "color": "[1 0 0 1 1 0 1 0 1]"
         }
-    }
-
-def create_endpoint(translation, children = ""):
-    return {
-
     }
 
 
@@ -543,6 +352,7 @@ def construct_worm_ring():
         }
     }
 
+
     return robot
 
 
@@ -555,8 +365,9 @@ def construct_worm_ring():
 if __name__ == "__main__":
     # Call the function and print the result
     #print(vrml_robot)
-    vrml_code = serialize_vrml(create_worm_ring("1 1 0"))
+    vrml_code = serialize_vrml(create_worm_ring("1 1 0.5"))
     #print(vrml_code)
-    print(vrml_code)
+    #print(vrml_code)
+    #print(coordinates)
     with open("generator.proto", "w") as file:
         file.write(vrml_code)

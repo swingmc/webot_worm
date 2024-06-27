@@ -17,6 +17,8 @@
 #include <webots/motor.h>
 #include <webots/position_sensor.h>
 #include <webots/robot.h>
+#include <stdlib.h>
+
 
 #include <stdio.h>
 #include <string.h>
@@ -26,31 +28,58 @@
 int main(int argc, char **argv) {
   printf("muscle controller started\n");
   wb_robot_init();
-  WbDeviceTag muscle = wb_robot_get_device("muscle");
-  WbDeviceTag muscle2 = 0;
   WbDeviceTag ps = wb_robot_get_device("position sensor");
   double p = 0.0;
   double max = 2.0;
   double step = 0.4;
-  if (strcmp(wb_robot_get_name(), "slider") == 0) {
-    max = 0.08;
-    step = 0.05;
-  } else if (strcmp(wb_robot_get_name(), "hinge2") == 0) {
-    muscle2 = wb_robot_get_device("muscle2");
-  }
-  if (strcmp(wb_robot_get_name(), "slider2") == 0) {
-    max = 0.08;
-    step = 0.05;
-  }
+
+
+  int rows = 1; // Define the number of rows
+  int cols = 6;
+  
+
+  WbDeviceTag **devices = malloc(rows * sizeof(WbDeviceTag*)); // Dynamically allocate memory for rows of device pointers
+
+    for (int i = 0; i < rows; i++) {
+        devices[i] = malloc(cols * sizeof(WbDeviceTag)); // Dynamically allocate memory for columns of device pointers for each row
+        for (int j = 0; j < cols; j++) {
+            char deviceName[20]; // Assume device names will not exceed 19 characters
+            sprintf(deviceName, "muscle_%d_%d", i, j); // Construct the device name using row and column indices
+            devices[i][j] = wb_robot_get_device(deviceName); // Retrieve the device by name and store its tag
+            // Assume you need to perform some operations with the device here
+        }
+    }
+  
+  WbDeviceTag **sensors = malloc(rows * sizeof(WbDeviceTag*)); // Dynamically allocate memory for rows of device pointers
+
+    for (int i = 0; i < rows; i++) {
+        sensors[i] = malloc(cols * sizeof(WbDeviceTag)); // Dynamically allocate memory for columns of device pointers for each row
+        for (int j = 0; j < cols; j++) {
+            char deviceName[20]; // Assume device names will not exceed 19 characters
+            sprintf(deviceName, "muscle_%d_%d_sensor", i, j); // Construct the device name using row and column indices
+            sensors[i][j] = wb_robot_get_device(deviceName); // Retrieve the device by name and store its tag
+            // Assume you need to perform some operations with the device here
+        }
+    }
+
   double dp = step;
   wb_position_sensor_enable(ps, TIME_STEP);
+  for (int i = 0; i < rows; i++) {
+    for (int j = 0; j < cols; j++) {
+      wb_position_sensor_enable(sensors[i][j], TIME_STEP);
+    }
+  }
 
   while (wb_robot_step(TIME_STEP) != -1) {
-    printf("muscle position: %f\n, time step: %d\n", p, TIME_STEP);
-    wb_motor_set_position(muscle, p);
-    if (muscle2)
-      wb_motor_set_position(muscle2, 2 - p);
-    const double pos = wb_position_sensor_get_value(ps);
+    //wb_motor_set_position(muscle, p);
+    //for (int i = 0; i < rows; i++) {
+    //    for (int j = 0; j < cols; j++) {
+    //        wb_motor_set_position(devices[i][j], p);
+    //    }
+    //}
+    wb_motor_set_position(devices[0][5], p);
+    const double pos = wb_position_sensor_get_value(sensors[0][5]);
+    printf("Position: %f, dp: %f, p: %f\n", pos, dp, p);
     if (pos <= 0.0)
       dp = -step;
     else if (pos >= max)
@@ -58,7 +87,20 @@ int main(int argc, char **argv) {
     p = pos - dp;
   };
 
-  wb_robot_cleanup();
 
+
+   // Free the allocated memory
+    for (int i = 0; i < rows; i++) {
+        free(devices[i]); // Free each row of device pointers
+    }
+    free(devices); // Free the top-level array of row pointers
+
+    for (int i = 0; i < rows; i++) {
+        free(sensors[i]); // Free each row of device pointers
+    }
+    free(sensors); // Free the top-level array of row pointers
+
+  wb_robot_cleanup();
+   
   return 0;
 }
