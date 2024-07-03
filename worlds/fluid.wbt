@@ -4,7 +4,7 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/Floor.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/clearpath/moose/protos/Moose.proto"
-
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/toys/protos/PaperBoat.proto"
 
 
 WorldInfo {
@@ -24,22 +24,82 @@ TexturedBackground {
 TexturedBackgroundLight {
 }
 
-Fluid {
-  name "sea"
-  density 1000
 
+Floor {
+  translation 0 -0.10000000000000003 0
+  size 100 100
+}
 
+DEF SWIMMING_POOL SolidPipe {
+  translation 0 0 0.25
+  height 0.5
+  radius 1.9
+  appearance DEF DARK_BROWN PBRAppearance {
+    baseColor 0.501961 0.337255 0.2
+    roughness 1.1102230246251565e-16
+    metalness 0
+  }
 }
 
 
-ImmersionProperties {
-  fluidName "sea"
-  
+DEF STILL_WATER Fluid {
+  translation 0 0 0.2
+  children [
+    DEF S Shape {
+      appearance DEF WATER_APPEARANCE PBRAppearance {
+        baseColor 0 0.501961 1
+        transparency 0.5
+        roughness 0.001
+        metalness 0
+      }
+      geometry Cylinder {
+        height 0.4
+        radius 1.8
+        subdivision 24
+      }
+    }
+  ]
+  name "swimming pool"
+  boundingObject USE S
 }
+DEF SWIMMING_POOL_BOTTOM Pose {
+  translation 0 0 0.02
+  children [
+    Shape {
+      appearance USE DARK_BROWN
+      geometry Cylinder {
+        height 0.02
+        radius 1.8
+        subdivision 24
+      }
+    }
+  ]
+}
+
+
+PaperBoat {
+  translation 0 1 1
+  rotation 0 0 1 -1.8325957
+  scale 2
+  mass 1.2
+  immersionProperties [
+    ImmersionProperties {
+      fluidName "swimming pool"
+      dragForceCoefficients 0.01 0 0
+      dragTorqueCoefficients 0.001 0 0
+      viscousResistanceForceCoefficient 800
+      viscousResistanceTorqueCoefficient 0.001
+    }
+  ]
+}
+
 
 
 Robot {
   translation 0 0 0.1
+  scale 2
+  mass 1.2
+  
   
   children [
     DistanceSensor {
@@ -90,6 +150,7 @@ Robot {
         }
       ]
       endPoint Solid {
+        
         translation 0.06 0 0.08
         rotation 0.7032499729135567 -0.702690394070353 -0.1080078037844199 3.356944138184365
         children [

@@ -23,6 +23,12 @@ TexturedBackground {
 }
 TexturedBackgroundLight {
 }
+
+
+
+
+
+
 Floor {
   size 100 100
 }
