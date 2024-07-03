@@ -28,6 +28,29 @@ for i in range(0, 6):
     x2, y2 = coordinates[(i + 1) % 6]
     rela_coordinates.append((x2 - x1, y2 - y1))
 
+
+
+# Compute the rotated vectors
+for i in range(1, 6):
+    # Initialize the original unit vector
+    x, y = 1, 0
+
+    # Initialize a list to hold the rotated vectors
+    rotated_vectors = [(x, y)]
+
+    # Angle of rotation in radians (60 degrees)
+    rotation_angle = math.radians(60)
+
+    # Apply the rotation matrix for 2D vectors
+    x_rotated = x * math.cos(rotation_angle * i) - y * math.sin(rotation_angle * i)
+    y_rotated = x * math.sin(rotation_angle * i) + y * math.cos(rotation_angle * i)
+    # Append the rotated vector to the list
+    rotated_vectors.append((round(x_rotated, 7), round(y_rotated, 7)))
+
+# Print the rotated vectors
+for vector in rotated_vectors:
+    print(vector)
+
 # Define appearance properties
 def create_appearance(base_color = "0.337255 0.337255 0.337255", roughness=1, metalness=0, transparency=0.009999999776482582):
     return {
@@ -170,6 +193,7 @@ def create_worm_ring(translation):
         ChildrenNode: {
             f"DEF JOINT_{0}_{0} Shape": create_shape(),
             "SliderJoint": create_slider_joint(0,0),
+            "SliderJoint": create_slider_joint(0,1),
             },
         "name": "\"worm\"",
         "boundingObject": "USE JOINT_0_0",
@@ -189,7 +213,7 @@ def create_joint_string(row, column):
 
 def create_joint_parameters():
     return {
-        "axis": "1 0 0",
+        "axis": "0 1 0",
     }
 
 """
@@ -220,6 +244,7 @@ def create_linked_slider_joint_endpoint(row, column):
     if column == ring_muscle_number:
         return {
             "translation": f"{row} {x} {y}",
+            "rotation": "1 0 0 1.0472",
             "children": {
                 "USE": f"JOINT_{row}_{0}"
             },
@@ -274,7 +299,7 @@ def create_linear_muscle_device(name):
 def create_linear_motor(name):
     return {        
         "name": f"\"{name}\"",
-        "controlPID": "1 0.6 0",
+        "controlPID": "0.4 0.6 0",
         "minPosition": "0",
         "maxPosition": "1",
         "maxForce": "0.3",

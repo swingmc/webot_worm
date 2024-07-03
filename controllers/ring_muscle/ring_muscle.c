@@ -23,15 +23,17 @@
 #include <stdio.h>
 #include <string.h>
 
-#define TIME_STEP 16
+#define TIME_STEP 320
 
 int main(int argc, char **argv) {
   printf("muscle controller started\n");
   wb_robot_init();
   WbDeviceTag ps = wb_robot_get_device("position sensor");
+  
   double p = 0.0;
   double max = 2.0;
   double step = 0.4;
+  
 
 
   int rows = 1; // Define the number of rows
@@ -70,13 +72,33 @@ int main(int argc, char **argv) {
     }
   }
 
+  double position_list[] = {0.01, 0.02 ,0.03 ,0.04, 0.05 ,0.06, 0.07, 0.08, 0.09 ,0.1};  
+
+  int cur_loc = 9;
+  bool is_increasing = false;
+
   while (wb_robot_step(TIME_STEP) != -1) {
     //wb_motor_set_position(muscle, p);
-    //for (int i = 0; i < rows; i++) {
-    //    for (int j = 0; j < cols; j++) {
-    //        wb_motor_set_position(devices[i][j], p);
-    //    }
-    //}
+    if (cur_loc == 9){
+        is_increasing = false;
+    }
+    else if (cur_loc == 0){
+        is_increasing = true;
+    }
+    if (is_increasing){
+        cur_loc += 1;
+    }else{
+        cur_loc -= 1;
+    }
+    for (int i = 0; i < 1; i++) {
+        for (int j = 0; j < cols; j++) {
+            wb_motor_set_position(devices[i][j], position_list[cur_loc]);
+            const double pos = wb_position_sensor_get_value(sensors[i][j]);
+            printf("Position: %f, j: %d\n", pos, j);
+        }
+    }
+
+    /*
     wb_motor_set_position(devices[0][5], p);
     const double pos = wb_position_sensor_get_value(sensors[0][5]);
     printf("Position: %f, dp: %f, p: %f\n", pos, dp, p);
@@ -85,6 +107,7 @@ int main(int argc, char **argv) {
     else if (pos >= max)
       dp = step;
     p = pos - dp;
+    */
   };
 
 

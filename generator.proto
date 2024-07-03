@@ -14,12 +14,12 @@ DEF WORM Robot {
       }
       SliderJoint {
         jointParameters JointParameters {
-          axis 1 0 0
+          axis 0 1 0
         }
         device [
             LinearMotor {
               name "muscle_0_0"
-              controlPID 1 0.6 0
+              controlPID 0.4 0.6 0
               minPosition 0
               maxPosition 1
               maxForce 0.3
@@ -50,12 +50,12 @@ DEF WORM Robot {
               }
               SliderJoint {
                 jointParameters JointParameters {
-                  axis 1 0 0
+                  axis 0 1 0
                 }
                 device [
                     LinearMotor {
                       name "muscle_0_1"
-                      controlPID 1 0.6 0
+                      controlPID 0.4 0.6 0
                       minPosition 0
                       maxPosition 1
                       maxForce 0.3
@@ -86,12 +86,12 @@ DEF WORM Robot {
                       }
                       SliderJoint {
                         jointParameters JointParameters {
-                          axis 1 0 0
+                          axis 0 1 0
                         }
                         device [
                             LinearMotor {
                               name "muscle_0_2"
-                              controlPID 1 0.6 0
+                              controlPID 0.4 0.6 0
                               minPosition 0
                               maxPosition 1
                               maxForce 0.3
@@ -122,12 +122,12 @@ DEF WORM Robot {
                               }
                               SliderJoint {
                                 jointParameters JointParameters {
-                                  axis 1 0 0
+                                  axis 0 1 0
                                 }
                                 device [
                                     LinearMotor {
                                       name "muscle_0_3"
-                                      controlPID 1 0.6 0
+                                      controlPID 0.4 0.6 0
                                       minPosition 0
                                       maxPosition 1
                                       maxForce 0.3
@@ -158,12 +158,12 @@ DEF WORM Robot {
                                       }
                                       SliderJoint {
                                         jointParameters JointParameters {
-                                          axis 1 0 0
+                                          axis 0 1 0
                                         }
                                         device [
                                             LinearMotor {
                                               name "muscle_0_4"
-                                              controlPID 1 0.6 0
+                                              controlPID 0.4 0.6 0
                                               minPosition 0
                                               maxPosition 1
                                               maxForce 0.3
@@ -194,12 +194,12 @@ DEF WORM Robot {
                                               }
                                               SliderJoint {
                                                 jointParameters JointParameters {
-                                                  axis 1 0 0
+                                                  axis 0 1 0
                                                 }
                                                 device [
                                                     LinearMotor {
                                                       name "muscle_0_5"
-                                                      controlPID 1 0.6 0
+                                                      controlPID 0.4 0.6 0
                                                       minPosition 0
                                                       maxPosition 1
                                                       maxForce 0.3
@@ -216,6 +216,7 @@ DEF WORM Robot {
                                                   ]
                                                 endPoint Solid {
                                                   translation 0 0.0 0.0
+                                                  rotation 1 0 0 1.0472
                                                   children [
                                                       USE JOINT_0_0
                                                     ]
