@@ -26,7 +26,7 @@ TexturedBackgroundLight {
 
 
 Floor {
-  translation 0 -0.10000000000000003 0
+  translation 0 -0.20000000000000003 0
   size 100 100
 }
 
@@ -85,8 +85,8 @@ PaperBoat {
   immersionProperties [
     ImmersionProperties {
       fluidName "swimming pool"
-      dragForceCoefficients 0.01 0 0
-      dragTorqueCoefficients 0.001 0 0
+      dragForceCoefficients 0.01 0.01 0.01
+      dragTorqueCoefficients 0.001 0.001 0.001
       viscousResistanceForceCoefficient 800
       viscousResistanceTorqueCoefficient 0.001
     }
@@ -98,8 +98,17 @@ PaperBoat {
 Robot {
   translation 0 0 0.1
   scale 2
-  mass 1.2
   
+  
+  immersionProperties [
+    ImmersionProperties {
+      fluidName "swimming pool"
+      dragForceCoefficients 0.01 0.01 0.01
+      dragTorqueCoefficients 0.001 0.001 0.001
+      viscousResistanceForceCoefficient 800
+      viscousResistanceTorqueCoefficient 0.001
+    }
+  ]
   
   children [
     DistanceSensor {
@@ -136,7 +145,7 @@ Robot {
         metalness 0
       }
       geometry Box {
-        size 0.1 0.02 0.2
+        size 0.2 0.04 0.4
       }
     }
     DEF WHEEL1 HingeJoint {
@@ -151,7 +160,16 @@ Robot {
       ]
       endPoint Solid {
         
-        translation 0.06 0 0.08
+        immersionProperties [
+    ImmersionProperties {
+      fluidName "swimming pool"
+      dragForceCoefficients 0.01 0.01 0.01
+      dragTorqueCoefficients 0.001 0.001 0.001
+      viscousResistanceForceCoefficient 800
+      viscousResistanceTorqueCoefficient 0.001
+    }
+  ]
+        translation 0.12 0 0.16
         rotation 0.7032499729135567 -0.702690394070353 -0.1080078037844199 3.356944138184365
         children [
           DEF Wheel Shape {
@@ -161,13 +179,15 @@ Robot {
             }
             geometry Cylinder {
               height 0.02
-              radius 0.03
+              radius 0.05
             }
           }
         ]
         boundingObject USE Wheel
         physics Physics {
-        }
+    density -1
+    mass 0.1
+  }
         linearVelocity -9.71189046189637e-06 -2.031078802181054e-05 -0.011548829531612776
         angularVelocity 1.0002004845823578 -0.00013086776761720933 -0.00022576239435845234
       }
@@ -183,7 +203,16 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.06 0 0.08
+        immersionProperties [
+    ImmersionProperties {
+      fluidName "swimming pool"
+      dragForceCoefficients 0.01 0.01 0.01
+      dragTorqueCoefficients 0.001 0.001 0.001
+      viscousResistanceForceCoefficient 800
+      viscousResistanceTorqueCoefficient 0.001
+    }
+  ]
+        translation -0.12 0 0.16
         rotation 0.28028581382327455 -0.2800627892694082 0.9181528721493301 1.6552909616592817
         children [
           DEF Wheel Shape {
@@ -193,14 +222,16 @@ Robot {
             }
             geometry Cylinder {
               height 0.02
-              radius 0.03
+              radius 0.05
             }
           }
         ]
         name "solid(1)"
         boundingObject USE Wheel
         physics Physics {
-        }
+    density -1
+    mass 0.1
+  }
         linearVelocity -9.713466656746628e-06 -1.8689764956204327e-05 -0.011566042842251139
         angularVelocity -0.9997985486908058 -0.00013368427789059705 0.0001994685708003965
       }
@@ -216,7 +247,16 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 0.06 0 -0.08
+        immersionProperties [
+    ImmersionProperties {
+      fluidName "swimming pool"
+      dragForceCoefficients 0.01 0.01 0.01
+      dragTorqueCoefficients 0.001 0.001 0.001
+      viscousResistanceForceCoefficient 800
+      viscousResistanceTorqueCoefficient 0.001
+    }
+  ]
+        translation 0.12 0 -0.16
         rotation 0.7032738368223066 -0.702714238990494 -0.10769683728523584 3.356328878105953
         children [
           DEF Wheel Shape {
@@ -226,14 +266,16 @@ Robot {
             }
             geometry Cylinder {
               height 0.02
-              radius 0.03
+              radius 0.05
             }
           }
         ]
         name "solid(2)"
         boundingObject USE Wheel
         physics Physics {
-        }
+    density -1
+    mass 0.1
+  }
         linearVelocity 1.0504512558988659e-05 1.1404267947638006e-05 -0.0115500399575616
         angularVelocity 1.000200484730734 -0.00013096426020161255 -0.00022580599198085267
       }
@@ -249,7 +291,16 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.059999999999999984 0 -0.08
+        immersionProperties [
+    ImmersionProperties {
+      fluidName "swimming pool"
+      dragForceCoefficients 0.01 0.01 0.01
+      dragTorqueCoefficients 0.001 0.001 0.001
+      viscousResistanceForceCoefficient 800
+      viscousResistanceTorqueCoefficient 0.001
+    }
+  ]
+        translation -0.12 0 -0.16
         rotation 0.27971344838274365 -0.2794908792623696 0.918501625041013 1.654912540715964
         children [
           DEF Wheel Shape {
@@ -259,14 +310,16 @@ Robot {
             }
             geometry Cylinder {
               height 0.02
-              radius 0.03
+              radius 0.05
             }
           }
         ]
         name "solid(3)"
         boundingObject USE Wheel
         physics Physics {
-        }
+    density -1
+    mass 0.1
+  }
         linearVelocity 1.0324073782015077e-05 1.29323160308377e-05 -0.01156729232304036
         angularVelocity -0.9997985485632817 -0.00013359975688499856 0.00019942754717297673
       }
@@ -274,6 +327,8 @@ Robot {
   ]
   boundingObject USE Body
   physics Physics {
+    density -1
+    mass 0.8
   }
   controller "snake_head"
   linearVelocity 3.5080692924084083e-07 -3.6660281834807615e-06 -0.011558070935988875
