@@ -1,6 +1,6 @@
 import math
 
-from generator import serialize_vrml
+from worm_generator import serialize_vrml
 
 
 
